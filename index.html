@@ -12,7 +12,8 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en', // Original language of the page
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE // Simple inline layout
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE, // Simple inline layout
+                includedLanguages: 'en,hi,gu,pa' // English, Hindi, Gujarati, Punjabi
             }, 'google_translate_element');
         }
     </script>
@@ -230,9 +231,6 @@
         .chatbot-button {
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            background-color: #0A2463; /* Primary Blue */
-            color: white;
             border-radius: 9999px; /* Full rounded */
             padding: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -241,13 +239,32 @@
             transition: all 0.3s ease;
         }
         .chatbot-button:hover {
-            background-color: #3E92CC; /* Secondary Blue */
             transform: scale(1.05);
         }
+
+        /* Hospital AI - Right Side */
+        #hospital-chatbot-button {
+            right: 20px;
+            background-color: #0A2463; /* Primary Blue */
+            color: white;
+        }
+        #hospital-chatbot-button:hover {
+            background-color: #3E92CC; /* Secondary Blue */
+        }
+
+        /* Manager AI - Left Side */
+        #manager-chatbot-button {
+            left: 20px; /* Position on the left */
+            background-color: #F4D35E; /* Accent Yellow */
+            color: #212529; /* Dark text */
+        }
+        #manager-chatbot-button:hover {
+            background-color: #E0B841; /* Darker yellow */
+        }
+
         .chatbot-modal {
             position: fixed;
             bottom: 90px; /* Above the button */
-            right: 20px;
             width: 350px;
             height: 500px;
             background-color: #FFFFFF;
@@ -258,6 +275,17 @@
             flex-direction: column;
             overflow: hidden;
         }
+
+        /* Hospital AI Modal - Right Side */
+        #hospital-chatbot-modal {
+            right: 20px;
+        }
+
+        /* Manager AI Modal - Left Side */
+        #manager-chatbot-modal {
+            left: 20px; /* Position on the left */
+        }
+
         .chat-header {
             background-color: #0A2463; /* Primary Blue */
             color: white;
@@ -269,6 +297,12 @@
             border-top-left-radius: 0.75rem;
             border-top-right-radius: 0.75rem;
         }
+        /* Manager Chat Header specific color */
+        #manager-chatbot-modal .chat-header {
+            background-color: #F4D35E; /* Accent Yellow */
+            color: #212529; /* Dark text */
+        }
+
         .chat-messages {
             flex-grow: 1;
             padding: 1rem;
@@ -325,6 +359,52 @@
             color: #212529;
             font-style: italic;
         }
+
+        /* Custom Modal Styles */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .custom-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+        }
+        .custom-modal-content h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        .custom-modal-content p {
+            color: #212529;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .custom-modal-content button {
+            background-color: #F4D35E;
+            color: #212529;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .custom-modal-content button:hover {
+            background-color: #E0B841;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -358,7 +438,6 @@
                 <p class="text-lg leading-relaxed text-gray-700 mb-4">"This was a unique case in that despite carrying such a heavy tumor inside her for a pretty long time, the patient was not feeling any pain. She herself told me that she was feeling perfectly alright," said Dr. Sinha.</p>
                 <p class="text-lg leading-relaxed text-gray-700 mb-4">When the patient was brought to the hospital on March 6, the doctors initially believed that it was a case of pregnancy. However, when she denied it, they became concerned and curious.</p>
                 <p class="text-lg leading-relaxed text-gray-700 mb-4">"Normally, the patient begins to feel acute pain when the size of the ovarian cyst begins to increase rapidly and the weight starts crossing the usual limit of about 6 kg or so. This was a truly remarkable, even challenging, case because not only had her tumor surpassed the normal size and weight, but she was also feeling no pain," explained Dr. Sinha.</p>
-                <p class="text-lg leading-relaxed text-gray-700 mb-4">The patient, Jivuben Mulariya, had no other ailments, according to Dr. Sinha. Her husband, Bhagwanji Mulariya, who is a fitter in the Western Railway, Jamnagar, said, "My wife had been carrying a bulging belly for the last couple of years. It had been increasing quite noticeably. She never complained of any pain or problem despite being in such a strange physical condition. Of course, she would often feel embarrassed when people asked her if she was pregnant."</p>
                 <p class="text-lg leading-relaxed text-gray-700">Dr. Anoop Lal Sinha now runs his own private hospital named Vishal Hospital in Rajkot, Gujarat. The hospital is located on Kailashwadi Main Road, Opposite Taluka Polish Choki, Junction Plot, Rajkot, Gujarat 360001. You can contact him at mobile number 9228105245 or landline number 0281-2450408.</p>
             </div>
         </section>
@@ -378,17 +457,33 @@
 
         <section id="book-appointment" class="mb-12">
             <h2 class="text-3xl font-bold mb-6 section-title">Book an Appointment</h2>
-            <div class="card text-center">
-                <p class="text-lg leading-relaxed text-gray-700 mb-6">Ready to schedule your visit? Use our convenient online form to book an appointment with Dr. A L Sinha or for other hospital services.</p>
-                <a href="https://form.jotform.com/251463004688458" target="_blank" rel="noopener noreferrer"
-                   class="inline-block accent-yellow-bg text-gray-800 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300 ease-in-out transform hover:scale-105"
-                   title="Schedule an appointment with Vishal Hospital">
-                    Schedule Your Appointment
-                </a>
-                <p class="text-sm text-gray-500 mt-4">Opens in a new window to the secure JotForm site.</p>
+            <div class="card">
+                <p class="text-lg leading-relaxed text-gray-700 mb-6">Please fill out the form below to request an appointment. We will contact you to confirm the details.</p>
+                <form id="appointmentForm" class="space-y-4">
+                    <div>
+                        <label for="fullName" class="block text-gray-700 text-sm font-bold mb-2">Full Name:</label>
+                        <input type="text" id="fullName" name="fullName" required
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="appointmentDate" class="block text-gray-700 text-sm font-bold mb-2">Preferred Date:</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" required
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="appointmentTime" class="block text-gray-700 text-sm font-bold mb-2">Preferred Time:</label>
+                        <input type="time" id="appointmentTime" name="appointmentTime" required
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">Available hours: 9:00 AM - 1:00 PM and 5:00 PM - 8:00 PM.</p>
+                    </div>
+                    <button type="submit"
+                            class="inline-block accent-yellow-bg text-gray-800 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300 ease-in-out transform hover:scale-105">
+                        Request Appointment
+                    </button>
+                </form>
+                <p class="text-sm text-gray-500 mt-4">Clicking 'Request Appointment' will open your email client to send the request.</p>
             </div>
         </section>
-
         <section id="get-directions" class="mb-12">
             <h2 class="text-3xl font-bold mb-6 section-title">Get Directions</h2>
             <div class="card text-center">
@@ -1201,23 +1296,49 @@
         <p>© <span id="currentYear"></span> Infographic based on an Analytical Report of Vishal Hospital, Rajkot. For informational purposes only.</p>
     </footer>
 
-    <div id="chatbot-button" class="chatbot-button">
+    <div id="customModalOverlay" class="custom-modal-overlay hidden">
+        <div class="custom-modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <button id="closeModal">Got it!</button>
+        </div>
+    </div>
+
+    <div id="hospital-chatbot-button" class="chatbot-button">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM10 9H8v2h2V9z" clip-rule="evenodd" />
         </svg>
     </div>
 
-    <div id="chatbot-modal" class="chatbot-modal hidden">
+    <div id="hospital-chatbot-modal" class="chatbot-modal hidden">
         <div class="chat-header">
             <span>Vishal Hospital AI Assistant</span>
-            <button id="close-chatbot" class="text-white text-xl leading-none">×</button>
+            <button id="close-hospital-chatbot" class="text-white text-xl leading-none">×</button>
         </div>
-        <div id="chat-messages" class="chat-messages">
-            <div class="message-bubble message-ai">Hello! I'm your AI assistant from Vishal Hospital. How can I help you today?</div>
-        </div>
+        <div id="hospital-chat-messages" class="chat-messages">
+            </div>
         <div class="chat-input-area">
-            <input type="text" id="chat-input" class="chat-input" placeholder="Ask a question...">
-            <button id="send-chat" class="chat-send-button">Send</button>
+            <input type="text" id="hospital-chat-input" class="chat-input" placeholder="Ask a question about the hospital...">
+            <button id="send-hospital-chat" class="chat-send-button">Send</button>
+        </div>
+    </div>
+
+    <div id="manager-chatbot-button" class="chatbot-button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+        </svg>
+    </div>
+
+    <div id="manager-chatbot-modal" class="chatbot-modal hidden">
+        <div class="chat-header">
+            <span>Website Manager AI</span>
+            <button id="close-manager-chatbot" class="text-white text-xl leading-none">×</button>
+        </div>
+        <div id="manager-chat-messages" class="chat-messages">
+            </div>
+        <div class="chat-input-area">
+            <input type="text" id="manager-chat-input" class="chat-input" placeholder="What do you want to add?">
+            <button id="send-manager-chat" class="chat-send-button">Send</button>
         </div>
     </div>
 
@@ -1289,17 +1410,98 @@
             console.log('Facebook Messenger link clicked.');
         });
 
+        // --- Custom Modal Logic ---
+        const customModalOverlay = document.getElementById('customModalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalButton = document.getElementById('closeModal');
 
-        // Chatbot Logic
-        const chatbotButton = document.getElementById('chatbot-button');
-        const chatbotModal = document.getElementById('chatbot-modal');
-        const closeChatbot = document.getElementById('close-chatbot');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const sendChatButton = document.getElementById('send-chat');
+        function showCustomModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            customModalOverlay.classList.remove('hidden');
+        }
 
-        // AI's knowledge base and instructions
-        const aiKnowledgeBase = `
+        closeModalButton.addEventListener('click', () => {
+            customModalOverlay.classList.add('hidden');
+        });
+
+        // --- Appointment Form Logic ---
+        const appointmentForm = document.getElementById('appointmentForm');
+        const fullNameInput = document.getElementById('fullName');
+        const appointmentDateInput = document.getElementById('appointmentDate');
+        const appointmentTimeInput = document.getElementById('appointmentTime');
+
+        // Set minimum date to today
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const dd = String(today.getDate()).padStart(2, '0');
+        appointmentDateInput.min = `${yyyy}-${mm}-${dd}`;
+
+        appointmentForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = fullNameInput.value.trim();
+            const date = appointmentDateInput.value;
+            const time = appointmentTimeInput.value;
+
+            if (!name || !date || !time) {
+                showCustomModal('Missing Information', 'Please fill in all fields (Name, Date, and Time) to request an appointment.');
+                return;
+            }
+
+            const selectedDateTime = new Date(`${date}T${time}`);
+            const selectedHour = selectedDateTime.getHours();
+            const selectedMinutes = selectedDateTime.getMinutes();
+
+            // Check time restrictions:
+            // Not between 1 PM (13:00) and 5 PM (17:00)
+            // Not between 8 PM (20:00) and 9 AM (09:00 next day)
+            const isTimeValid = (selectedHour >= 9 && selectedHour < 13) || // 9 AM to 1 PM
+                                (selectedHour >= 17 && selectedHour < 20);   // 5 PM to 8 PM
+
+            if (!isTimeValid) {
+                showCustomModal('Invalid Time Slot', 'Please select an appointment time between 9:00 AM - 1:00 PM or 5:00 PM - 8:00 PM.');
+                return;
+            }
+
+            const subject = encodeURIComponent(`Appointment Request from ${name}`);
+            const body = encodeURIComponent(`
+Dear Vishal Hospital,
+
+I would like to request an appointment with the following details:
+
+Name: ${name}
+Preferred Date: ${date}
+Preferred Time: ${time}
+
+Please confirm the appointment at your earliest convenience.
+
+Thank you,
+${name}
+            `);
+
+            const mailtoLink = `mailto:vishalhospital@hotmail.co.in?subject=${subject}&body=${body}`;
+
+            window.location.href = mailtoLink;
+
+            showCustomModal('Appointment Request Sent', 'Your email client will now open with the appointment request. Please click "Send" to complete your request.');
+        });
+
+
+        // --- Hospital Chatbot Logic ---
+        const hospitalChatbotButton = document.getElementById('hospital-chatbot-button');
+        const hospitalChatbotModal = document.getElementById('hospital-chatbot-modal');
+        const closeHospitalChatbot = document.getElementById('close-hospital-chatbot');
+        const hospitalChatMessages = document.getElementById('hospital-chat-messages');
+        const hospitalChatInput = document.getElementById('hospital-chat-input');
+        const sendHospitalChatButton = document.getElementById('send-hospital-chat');
+
+        // AI's knowledge base and instructions for Hospital AI
+        const aiHospitalKnowledgeBase = `
+            You are an AI assistant for the Vishal Hospital website.
+            Your primary role is to provide information about Vishal Hospital based on the details provided below.
             Vishal Hospital, Rajkot, is a private hospital specializing in General Surgery, led by Dr. A L Sinha.
             It was established in 2006 and has been serving Rajkot for over 10 years.
             Location: Kailashwadi Main Road, Opposite Taluka Police Choki, Junction Plot, Rajkot, Gujarat 360001. It is highly accessible with ample parking.
@@ -1333,55 +1535,126 @@
             Instructions for AI:
             - Answer questions only based on the information provided above.
             - Be concise and helpful.
-            - If a user asks about appointments, booking, contact details, or how to reach the hospital, proactively provide the following contact information:
+            - If a user asks about appointments, booking, contact details, or how to reach the hospital, proactively provide ALL of the following contact information:
                 - Phone Number: 0281-2450408
                 - Mobile Number: 9228105245
                 - Email ID: vishalhospital@hotmail.co.in
             - If the user asks a question that cannot be answered from the provided information, state that you do not have that information.
         `;
 
-        let chatHistory = [{ role: "system", parts: [{ text: aiKnowledgeBase }] }];
-        chatHistory.push({ role: "model", parts: [{ text: "Hello! I'm your AI assistant from Vishal Hospital. How can I help you today?" }] });
+        let hospitalChatHistory = [{ role: "system", parts: [{ text: aiHospitalKnowledgeBase }] }];
+        hospitalChatHistory.push({ role: "model", parts: [{ text: "Hello! I'm your AI assistant from Vishal Hospital. How can I help you today?" }] });
 
-        // Initial welcome message display
-        chatMessages.innerHTML = ''; // Clear initial "Hello!" from HTML
-        appendMessage("Hello! I'm your AI assistant from Vishal Hospital. How can I help you today?", 'ai');
+        // Initial welcome message display for Hospital AI
+        hospitalChatMessages.innerHTML = '';
+        appendMessage(hospitalChatMessages, "Hello! I'm your AI assistant from Vishal Hospital. How can I help you today?", 'ai');
 
 
-        chatbotButton.addEventListener('click', () => {
-            chatbotModal.classList.toggle('hidden');
-            if (!chatbotModal.classList.contains('hidden')) {
-                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom on open
-                chatInput.focus();
+        hospitalChatbotButton.addEventListener('click', () => {
+            hospitalChatbotModal.classList.toggle('hidden');
+            if (!hospitalChatbotModal.classList.contains('hidden')) {
+                hospitalChatMessages.scrollTop = hospitalChatMessages.scrollHeight;
+                hospitalChatInput.focus();
             }
+            // Hide other modal if open
+            managerChatbotModal.classList.add('hidden');
         });
 
-        closeChatbot.addEventListener('click', () => {
-            chatbotModal.classList.add('hidden');
+        closeHospitalChatbot.addEventListener('click', () => {
+            hospitalChatbotModal.classList.add('hidden');
         });
 
-        sendChatButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
+        sendHospitalChatButton.addEventListener('click', () => sendMessage(hospitalChatInput, hospitalChatMessages, hospitalChatHistory));
+        hospitalChatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                sendMessage();
+                sendMessage(hospitalChatInput, hospitalChatMessages, hospitalChatHistory);
             }
         });
 
-        async function sendMessage() {
-            const userMessage = chatInput.value.trim();
+        // --- Manager Chatbot Logic ---
+        const managerChatbotButton = document.getElementById('manager-chatbot-button');
+        const managerChatbotModal = document.getElementById('manager-chatbot-modal');
+        const closeManagerChatbot = document.getElementById('close-manager-chatbot');
+        const managerChatMessages = document.getElementById('manager-chat-messages');
+        const managerChatInput = document.getElementById('manager-chat-input');
+        const sendManagerChatButton = document.getElementById('send-manager-chat');
+
+        // AI's knowledge base and instructions for Manager AI
+        const aiManagerKnowledgeBase = `
+            You are an AI website manager assistant for the Vishal Hospital website.
+            Your primary role is to help users *add new content or features* to the website by providing code.
+            You can also help *suggest code-based solutions* for problems if the user describes them.
+            You *cannot* directly monitor, diagnose, or autonomously fix live website issues. Your function is purely additive and advisory, providing code snippets for the user to implement.
+            You *cannot* remove or delete any existing content or features.
+            When a user asks to add something, ask them to describe what they want to add in detail, and then provide the relevant code.
+            Explain that the user will need to manually copy and paste the code into their website file.
+            Example additions you can help with:
+            - A new text section
+            - A new image placeholder
+            - A new button linking to an external site
+            - A simple interactive element (e.g., a counter, a simple form)
+            - A new social media link
+            - A new section for patient testimonials.
+            - A new paragraph of text.
+            - A new heading.
+            - A new list.
+            - A new link.
+            - A new video embed (provide example YouTube embed code).
+            - A new contact form (provide simple HTML structure).
+            - A new section with a background color.
+            - A new icon (provide Font Awesome example).
+            Example problem-solving suggestions:
+            - If a user says "My button isn't centered," you can provide CSS to center it.
+            - If a user says "I want to add a new image but it's too big," you can provide CSS to resize it.
+            - If a user says "My text is too small," you can provide CSS to increase font size.
+        `;
+
+        let managerChatHistory = [{ role: "system", parts: [{ text: aiManagerKnowledgeBase }] }];
+        managerChatHistory.push({ role: "model", parts: [{ text: "Hello! I'm the Website Manager AI. I can help you add new content or features to this website by providing you with the necessary code. I can also suggest code solutions if you describe a problem. What would you like to add or fix?" }] });
+
+        // Initial welcome message display for Manager AI
+        managerChatMessages.innerHTML = '';
+        appendMessage(managerChatMessages, "Hello! I'm the Website Manager AI. I can help you add new content or features to this website by providing you with the necessary code. I can also suggest code solutions if you describe a problem. What would you like to add or fix?", 'ai');
+
+
+        managerChatbotButton.addEventListener('click', () => {
+            managerChatbotModal.classList.toggle('hidden');
+            if (!managerChatbotModal.classList.contains('hidden')) {
+                managerChatMessages.scrollTop = managerChatMessages.scrollHeight;
+                managerChatInput.focus();
+            }
+            // Hide other modal if open
+            hospitalChatbotModal.classList.add('hidden');
+        });
+
+        closeManagerChatbot.addEventListener('click', () => {
+            managerChatbotModal.classList.add('hidden');
+        });
+
+        sendManagerChatButton.addEventListener('click', () => sendMessage(managerChatInput, managerChatMessages, managerChatHistory));
+        managerChatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(managerChatInput, managerChatMessages, managerChatHistory);
+            }
+        });
+
+
+        // --- Generic Send Message Function ---
+        async function sendMessage(inputElement, messagesElement, historyArray) {
+            const userMessage = inputElement.value.trim();
             if (userMessage === '') return;
 
             // Add user message to chat history and display
-            appendMessage(userMessage, 'user');
-            chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
-            chatInput.value = ''; // Clear input
+            appendMessage(messagesElement, userMessage, 'user');
+            historyArray.push({ role: "user", parts: [{ text: userMessage }] });
+            inputElement.value = ''; // Clear input
 
             // Add loading indicator
-            const loadingMessage = appendMessage('Typing...', 'ai loading');
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const loadingMessage = appendMessage(messagesElement, 'Typing...', 'ai loading');
+            messagesElement.scrollTop = messagesElement.scrollHeight;
 
             try {
-                const payload = { contents: chatHistory };
+                const payload = { contents: historyArray };
                 const apiKey = ""; // Canvas will provide this at runtime
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
@@ -1400,22 +1673,22 @@
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const aiResponse = result.candidates[0].content.parts[0].text;
-                    appendMessage(aiResponse, 'ai');
-                    chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
+                    appendMessage(messagesElement, aiResponse, 'ai');
+                    historyArray.push({ role: "model", parts: [{ text: aiResponse }] });
                 } else {
-                    appendMessage("Sorry, I couldn't get a response. Please try again.", 'ai');
+                    appendMessage(messagesElement, "Sorry, I couldn't get a response. Please try again.", 'ai');
                     console.error("Gemini API returned an unexpected response structure:", result);
                 }
             } catch (error) {
                 // Remove loading indicator
                 loadingMessage.remove();
-                appendMessage("Sorry, an error occurred while fetching the response. Please try again later.", 'ai');
+                appendMessage(messagesElement, "Sorry, an error occurred while fetching the response. Please try again later.", 'ai');
                 console.error("Error calling Gemini API:", error);
             }
-            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom after AI response
+            messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll to bottom after AI response
         }
 
-        function appendMessage(text, sender) {
+        function appendMessage(messagesContainer, text, sender) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message-bubble');
             if (sender === 'user') {
@@ -1427,8 +1700,8 @@
                 }
             }
             messageElement.textContent = text;
-            chatMessages.appendChild(messageElement);
-            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Auto-scroll to the latest message
             return messageElement; // Return the created element for potential removal (e.g., loading message)
         }
     </script>
